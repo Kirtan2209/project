@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Smart Door Security System | Ultra-Smooth Live Stream & Google Sheets Hub</title>
+  <meta name="description" content="Next-generation Smart Door Security & Camera Streaming System powered by Google Sheets backend, live video streaming, AI motion detection, and ultra-smooth cyber animations.">
+  <meta name="theme-color" content="#00f2fe">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23070a12'/><path d='M50 15 L80 30 V55 C80 72 50 85 50 85 C50 85 20 72 20 55 V30 Z' fill='none' stroke='%2300f2fe' stroke-width='6'/><circle cx='50' cy='48' r='12' fill='%2300f2fe'/></svg>">
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Cyber Design Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- App Loader -->
+  <div id="app-loader" class="app-loader">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <i class="fas fa-shield-halved"></i>
+      </div>
+      <div class="loader-text">INITIALIZING SYSTEMS</div>
+      <div class="loader-bar-container">
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Shutter Camera Flash Overlay -->
+  <div class="shutter-flash-overlay" id="shutter-flash"></div>
+
+  <!-- ================= SITE HEADER ================= -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#" class="brand-logo" data-nav="home">
+        <div class="logo-icon">
+          <i class="fas fa-shield-halved"></i>
+        </div>
+        <span>SMART<span class="text-cyan">DOOR</span></span>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav>
+        <ul class="desktop-nav">
+          <li><a href="#" class="nav-link active" data-nav="home"><i class="fas fa-house"></i> Home</a></li>
+          <li><a href="#" class="nav-link" data-nav="camera"><i class="fas fa-video"></i> Live Stream</a></li>
+          <li><a href="#" class="nav-link" data-nav="dashboard"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+          <li><a href="#" class="nav-link" data-nav="history"><i class="fas fa-users-viewfinder"></i> Visitors</a></li>
+          <li><a href="#" class="nav-link" data-nav="motion"><i class="fas fa-wave-square"></i> Motion Logs</a></li>
+          <li><a href="#" class="nav-link" data-nav="gallery"><i class="fas fa-images"></i> Gallery</a></li>
+          <li><a href="#" class="nav-link" data-nav="settings"><i class="fas fa-table text-cyan"></i> Sheet Config</a></li>
+          <li><a href="#" class="nav-link" data-nav="about"><i class="fas fa-info-circle"></i> About</a></li>
+        </ul>
+      </nav>
+
+      <!-- Header Action Controls -->
+      <div class="header-actions">
+        <!-- Live Clock -->
+        <div class="header-clock" id="header-clock" title="System Time">
+          <i class="far fa-clock text-cyan"></i>
+          <span id="header-time">00:00:00</span>
+        </div>
+        <!-- Global Motion Sensor Arm/Disarm Button -->
+        <button class="btn btn-glass btn-sm" id="header-arm-motion-btn" title="Turn Camera Motion Sensor ON / OFF">
+          <i class="fas fa-shield text-dim" id="header-sensor-icon"></i>
+          <span id="header-sensor-text">Motion Sensor: OFF</span>
+        </button>
+
+        <div class="hud-pill" id="header-sheets-pill" title="Google Sheets Backend Health">
+          <span class="pulse-dot warning" id="header-pulse"></span>
+          <span id="header-sheets-status">Sheets: Demo Mode</span>
+        </div>
+
+        <button class="btn-icon" id="audio-toggle-btn" title="Toggle Sound Effects">
+          <i class="fas fa-volume-high" id="audio-icon"></i>
+        </button>
+
+        <button class="btn-icon" id="theme-toggle-btn" title="Toggle Dark/Light Mode">
+          <i class="fas fa-moon" id="theme-icon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MOBILE BOTTOM NAVIGATION DOCK ================= -->
+  <nav class="mobile-bottom-dock">
+    <ul class="dock-menu">
+      <li class="dock-item">
+        <a href="#" class="active" data-nav="home">
+          <i class="fas fa-house"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="dock-item">
+        <a href="#" data-nav="dashboard">
+          <i class="fas fa-gauge-high"></i>
+          <span>Stats</span>
+        </a>
+      </li>
+      <li class="dock-item dock-item-camera">
+        <a href="#" data-nav="camera" title="Open Live Stream">
+          <i class="fas fa-video"></i>
+        </a>
+      </li>
+      <li class="dock-item">
+        <a href="#" data-nav="history">
+          <i class="fas fa-users"></i>
+          <span>Logs</span>
+        </a>
+      </li>
+      <li class="dock-item">
+        <a href="#" data-nav="settings">
+          <i class="fas fa-gear"></i>
+          <span>Config</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ================= MAIN CONTENT CONTAINER ================= -->
+  <main class="main-content">
+
+    <!-- ================= VIEW 1: HOME ================= -->
+    <section class="page-view active" id="view-home">
+      <!-- Hero Banner -->
+      <div class="glass-panel hero-card">
+        <div>
+          <div class="hero-tag">
+            <span class="pulse-dot"></span>
+            <span>Ultra-Smooth Security Engine</span>
+          </div>
+          <h1 class="hero-title">
+            Intelligent Front Door <br><span class="text-cyan">Live Video Monitoring</span>
+          </h1>
+          <p class="hero-desc">
+            Experience ultra-smooth 60fps streaming, instant photo capture with Google Drive auto-sync, 
+            and real-time Google Sheets visitor telemetry engineered for both Mobile and PC.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-cyber" data-nav="camera">
+              <i class="fas fa-play"></i> Watch Live Stream
+            </button>
+            <button class="btn btn-doorbell" id="quick-doorbell-btn">
+              <i class="fas fa-bell"></i> Ring Doorbell
+            </button>
+            <button class="btn btn-glass" id="home-arm-motion-btn" title="Turn Camera Motion Sensor ON / OFF">
+              <i class="fas fa-shield text-dim" id="home-sensor-icon"></i>
+              <span id="home-sensor-text">Motion Sensor: OFF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Stream Mini Preview -->
+        <div class="hero-stream-preview" data-nav="camera" style="cursor: pointer;" title="Click to expand Stream View">
+          <canvas class="hero-stream-canvas" id="hero-stream-canvas"></canvas>
+          <div class="hero-stream-badge">
+            <span class="rec-pulse-dot"></span>
+            <span>LIVE 4K</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Telemetry Stats Grid -->
+      <div class="stats-grid">
+        <!-- Weather Widget -->
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-blue">
+            <i class="fas fa-cloud-sun" id="weather-icon"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="weather-temp">--°</div>
+            <div class="stat-label" id="weather-desc">Fetching Weather...</div>
+          </div>
+        </div>
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-cyan">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="stat-total-visitors">24</div>
+            <div class="stat-label">Total Visitors Logged</div>
+          </div>
+        </div>
+
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-rose">
+            <i class="fas fa-person-walking"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="stat-motion-count">16</div>
+            <div class="stat-label">PIR Motion Triggers</div>
+          </div>
+        </div>
+
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-amber">
+            <i class="fas fa-bell"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="stat-doorbell-count">8</div>
+            <div class="stat-label">Doorbell Chimes</div>
+          </div>
+        </div>
+
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-emerald">
+            <i class="fas fa-cloud-arrow-up"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="stat-ping-latency">24ms</div>
+            <div class="stat-label">Google Sheets Latency</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Visitors Carousel / List -->
+      <div class="glass-panel table-panel">
+        <div class="table-toolbar">
+          <div>
+            <h3>Recent Door Events</h3>
+            <p class="section-subtitle">Real-time entries synced with Google Sheets</p>
+          </div>
+          <button class="btn btn-glass" data-nav="history">
+            View All Logs <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Visitor ID</th>
+              <th>Time</th>
+              <th>Trigger Type</th>
+              <th>Status</th>
+              <th>Snapshot</th>
+            </tr>
+          </thead>
+          <tbody id="home-recent-table-body">
+            <!-- Populated via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: LIVE STREAM (MASTER CONSOLE) ================= -->
+    <section class="page-view" id="view-camera">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Ultra-Smooth <span class="text-cyan">Live Stream</span></h2>
+          <p class="section-subtitle">Cinematic 60fps feed with HUD overlays, digital PTZ control, and Drive snapshots</p>
+        </div>
+        <div class="header-actions" style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-glass" id="btn-pip-toggle" title="Picture-in-Picture">
+            <i class="fas fa-external-link-alt"></i> PiP
+          </button>
+          <button class="btn btn-glass" id="btn-fullscreen-toggle">
+            <i class="fas fa-expand"></i> Fullscreen
+          </button>
+        </div>
+      </div>
+
+      <div class="stream-layout">
+        <!-- Main Video Screen -->
+        <div class="glass-panel stream-viewport-card">
+          <div class="stream-screen-wrapper" id="stream-wrapper">
+            <!-- Video for Local Webcam -->
+            <video class="stream-video" id="live-video-element" autoplay playsinline muted style="display: none;"></video>
+            <!-- Direct Live MJPEG Stream from ESP32-CAM -->
+            <img class="stream-video" id="live-mjpeg-stream" alt="Live ESP32-CAM Stream" style="display: none;">
+            <!-- Canvas for Cyber Procedural Simulation -->
+            <canvas class="stream-canvas" id="live-stream-canvas"></canvas>
+
+            <!-- Futuristic HUD Elements -->
+            <div class="stream-hud-overlay">
+              <div class="hud-top-bar">
+                <div class="hud-badge-group">
+                  <span class="hud-tag hud-tag-live">
+                    <span class="pulse-dot"></span> LIVE FEED
+                  </span>
+                  <span class="hud-tag hud-tag-rec" id="hud-rec-tag" style="display: none;">
+                    <span class="rec-pulse-dot"></span> REC <span id="rec-duration">00:00</span>
+                  </span>
+                  <span class="hud-tag hud-tag-fps" id="hud-fps-tag">60.0 FPS</span>
+                </div>
+                <div class="hud-badge-group">
+                  <span class="hud-tag" id="hud-resolution-tag">4K UHD</span>
+                  <span class="hud-tag" id="hud-bitrate-tag">3840 kbps</span>
+                </div>
+              </div>
+
+              <!-- Center Reticle & Target Crosshairs -->
+              <div class="hud-center-crosshair"></div>
+
+              <!-- AI Motion Bounding Box Overlay -->
+              <div class="hud-motion-box" id="hud-motion-box">
+                <span>TARGET DETECTED</span>
+                <span>CONFIDENCE: 98.4%</span>
+                <span>ID: VIS-AUTO</span>
+              </div>
+
+              <div class="hud-bottom-bar">
+                <div class="hud-timecode" id="hud-clock-display">2026-09-12 10:30:00</div>
+                <div class="hud-badge-group">
+                  <span class="hud-tag text-emerald"><i class="fas fa-shield-check"></i> SECURE STREAM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stream Control Toolbar -->
+          <div class="stream-control-bar">
+            <!-- Row 1: Primary Camera Actions -->
+            <div class="stream-actions-left">
+              <button class="btn btn-cyber" id="btn-stream-snapshot">
+                <i class="fas fa-camera"></i> <span>Snapshot</span>
+              </button>
+              <button class="btn btn-alert" id="btn-stream-record">
+                <i class="fas fa-circle-dot"></i> <span id="btn-record-text">Record</span>
+              </button>
+              <!-- Dedicated Camera Motion Sensor ON/OFF Button -->
+              <button class="btn btn-glass" id="btn-arm-motion-sensor" title="Turn Camera Motion Sensor ON / OFF">
+                <i class="fas fa-shield text-dim" id="sensor-btn-icon"></i>
+                <span id="sensor-btn-text">Motion Sensor: OFF</span>
+              </button>
+            </div>
+            <!-- Row 2: Secondary Quick Controls -->
+            <div class="stream-actions-right">
+              <button class="btn btn-glass" id="btn-cyber-filter" title="Toggle Cyber Filter">
+                <i class="fas fa-magic"></i> <span>Filter</span>
+              </button>
+              <button class="btn btn-glass" id="btn-night-vision-toggle" title="Toggle Night Vision">
+                <i class="fas fa-moon"></i> <span>Night</span>
+              </button>
+              <button class="btn btn-glass" id="btn-motion-box-toggle" title="Toggle Motion Box">
+                <i class="fas fa-vector-square"></i> <span>Tracker</span>
+              </button>
+              <button class="btn btn-doorbell" id="btn-stream-doorbell" title="Ring Doorbell Chime">
+                <i class="fas fa-bell"></i> <span>Chime</span>
+              </button>
+              <button class="btn btn-glass" id="btn-stream-alarm" title="Security Siren">
+                <i class="fas fa-bullhorn text-rose"></i> <span>Siren</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stream Sidebar: Source Switcher & PTZ Controls -->
+        <div class="stream-sidebar">
+          <!-- Stream Source Switcher -->
+          <div class="glass-panel source-selector-panel">
+            <h4><i class="fas fa-sliders text-cyan"></i> Stream Source</h4>
+            <div class="source-options">
+              <button class="source-btn" id="source-esp32-btn" data-source="esp32">
+                <i class="fas fa-video text-rose"></i>
+                <div style="flex: 1;">
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span>Live ESP32-CAM</span>
+                    <span class="pulse-dot" id="esp32-status-dot" style="width: 7px; height: 7px;"></span>
+                  </div>
+                  <small id="esp32-status-text" style="color: var(--text-dim);">Checking Google Sheets...</small>
+                </div>
+              </button>
+              <button class="source-btn active" data-source="simulation">
+                <i class="fas fa-microchip text-cyan"></i>
+                <div>
+                  <div>Cyber Procedural Stream</div>
+                  <small style="color: var(--text-dim);">Built-in 60fps simulation</small>
+                </div>
+              </button>
+              <button class="source-btn" data-source="webcam">
+                <i class="fas fa-camera-rotate text-emerald"></i>
+                <div>
+                  <div>Local Webcam / Phone Cam</div>
+                  <small style="color: var(--text-dim);">Real device camera</small>
+                </div>
+              </button>
+              <button class="source-btn" data-source="custom">
+                <i class="fas fa-network-wired text-amber"></i>
+                <div>
+                  <div>Custom IP / Stream URL</div>
+                  <small style="color: var(--text-dim);">MJPEG or RTSP HTTP stream</small>
+                </div>
+              </button>
+            </div>
+
+            <!-- Custom URL Input (Shows when 'custom' selected) -->
+            <div id="custom-stream-box" style="margin-top: 1rem; display: none;">
+              <input type="text" class="input-text" id="custom-stream-url-input" placeholder="http://192.168.1.100/stream" style="width: 100%; margin-bottom: 0.5rem;">
+              <button class="btn btn-cyber" id="btn-apply-stream-url" style="width: 100%; padding: 0.5rem;">
+                Connect Stream
+              </button>
+            </div>
+          </div>
+
+          <!-- Digital PTZ Pan/Tilt Dial -->
+          <div class="glass-panel ptz-panel">
+            <h4><i class="fas fa-arrows-spin text-cyan"></i> PTZ Camera Direction</h4>
+            <p class="section-subtitle">Rotate camera view angle (0° - 180°)</p>
+            
+            <div class="ptz-dial-wrapper">
+              <div class="ptz-dial-ring" id="ptz-ring"></div>
+              <div class="ptz-dial-knob" id="ptz-knob">
+                <span id="ptz-degree-display">90°</span>
+                <small style="font-size: 0.65rem; color: #000; font-weight: 700;">CENTER</small>
+              </div>
+            </div>
+
+            <div class="ptz-presets">
+              <button class="ptz-preset-btn" data-angle="45">45° Left</button>
+              <button class="ptz-preset-btn" data-angle="90">90° Center</button>
+              <button class="ptz-preset-btn" data-angle="135">135° Right</button>
+            </div>
+          </div>
+
+          <!-- AI Computer Vision Motion Tracker & Auto-Follow Panel -->
+          <div class="glass-panel motion-tracker-panel">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
+              <h4 style="font-size: 0.95rem;"><i class="fas fa-crosshairs text-amber"></i> AI Motion Tracker</h4>
+              <span class="badge-tag" id="hud-motion-state-badge" style="font-size: 0.7rem; background: rgba(255,255,255,0.08); color: var(--text-dim);">DISARMED</span>
+            </div>
+            
+            <p class="section-subtitle" style="font-size: 0.8rem; margin-bottom: 0.75rem;">
+              Optical motion detection active strictly on Camera feed (Webcam / ESP32-CAM).
+            </p>
+
+            <!-- Arm / Disarm Sensor Button in Sidebar -->
+            <div style="margin-bottom: 0.85rem;">
+              <button class="btn btn-glass" id="sidebar-arm-motion-btn" style="width: 100%; justify-content: center; gap: 0.5rem; font-size: 0.82rem;">
+                <i class="fas fa-power-off"></i> <span id="sidebar-arm-text">Turn ON Camera Motion Sensor</span>
+              </button>
+            </div>
+
+            <!-- Motion Intensity Progress Bar -->
+            <div style="margin-bottom: 0.9rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 0.35rem;">
+                <span class="text-muted">Camera Motion:</span>
+                <span id="motion-intensity-val" style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-amber);">OFF</span>
+              </div>
+              <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                <div id="motion-intensity-bar" style="width: 0%; height: 100%; background: var(--gradient-alert); transition: width 0.15s ease;"></div>
+              </div>
+            </div>
+
+            <!-- Auto-Follow Camera Toggle -->
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.06);">
+              <div style="font-size: 0.85rem; font-weight: 600;">
+                <div>Auto-Follow Target (PTZ)</div>
+                <small style="color: var(--text-dim); font-size: 0.72rem;">Camera dial turns to follow person</small>
+              </div>
+              <label class="switch-toggle">
+                <input type="checkbox" id="toggle-auto-follow" checked>
+                <span class="slider-toggle"></span>
+              </label>
+            </div>
+
+            <!-- Auto-Upload Snapshot on Motion Toggle -->
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; border-top: 1px solid rgba(255,255,255,0.06);">
+              <div style="font-size: 0.85rem; font-weight: 600;">
+                <div>Auto-Save to Sheets</div>
+                <small style="color: var(--text-dim); font-size: 0.72rem;">Auto-upload snapshot on intrusion</small>
+              </div>
+              <label class="switch-toggle">
+                <input type="checkbox" id="toggle-auto-snapshot" checked>
+                <span class="slider-toggle"></span>
+              </label>
+            </div>
+
+            <!-- Motion Sensitivity Selector -->
+            <div style="margin-top: 0.75rem;">
+              <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">Sensitivity</label>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem;">
+                <button class="btn btn-glass motion-sens-btn" data-sens="high" style="padding: 0.35rem; font-size: 0.75rem;">High</button>
+                <button class="btn btn-glass motion-sens-btn active" data-sens="medium" style="padding: 0.35rem; font-size: 0.75rem;">Medium</button>
+                <button class="btn btn-glass motion-sens-btn" data-sens="low" style="padding: 0.35rem; font-size: 0.75rem;">Low</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: DASHBOARD ================= -->
+    <section class="page-view" id="view-dashboard">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">System <span class="text-cyan">Dashboard</span></h2>
+          <p class="section-subtitle">Real-time operational telemetry, trigger distributions, and sync status</p>
+        </div>
+        <button class="btn btn-cyber" id="btn-refresh-dashboard">
+          <i class="fas fa-arrows-rotate"></i> Refresh Sync
+        </button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-blue">
+            <i class="fas fa-battery-half" id="battery-icon"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="battery-level">--%</div>
+            <div class="stat-label" id="battery-status">Battery Status</div>
+          </div>
+        </div>
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-cyan">
+            <i class="fas fa-server"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">99.98%</div>
+            <div class="stat-label">System Uptime</div>
+          </div>
+        </div>
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-emerald">
+            <i class="fas fa-database"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number" id="dash-sheet-count">Synced</div>
+            <div class="stat-label">Google Sheets Status</div>
+          </div>
+        </div>
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-rose">
+            <i class="fas fa-shield-virus"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">Active</div>
+            <div class="stat-label">Motion Guard Mode</div>
+          </div>
+        </div>
+        <div class="glass-panel stat-card">
+          <div class="stat-icon-box stat-icon-amber">
+            <i class="fas fa-hard-drive"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">Auto</div>
+            <div class="stat-label">Google Drive Auto-Backup</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Center -->
+      <div class="glass-panel" style="padding: 2rem; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;"><i class="fas fa-bolt text-amber"></i> Quick Security Controls</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+          <button class="btn btn-doorbell" id="dash-doorbell-btn">
+            <i class="fas fa-bell"></i> Ring Front Doorbell
+          </button>
+          <button class="btn btn-glass" id="dash-arm-motion-btn" title="Turn Camera Motion Sensor ON / OFF">
+            <i class="fas fa-shield text-dim" id="dash-sensor-icon"></i>
+            <span id="dash-sensor-text">Motion Sensor: OFF</span>
+          </button>
+          <button class="btn btn-cyber" id="dash-snapshot-btn">
+            <i class="fas fa-camera"></i> Instant Cloud Snapshot
+          </button>
+          <button class="btn btn-emerald" id="dash-ping-btn">
+            <i class="fas fa-wifi"></i> Test Google Sheet Ping
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: VISITOR HISTORY ================= -->
+    <section class="page-view" id="view-history">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Visitor <span class="text-cyan">History Logs</span></h2>
+          <p class="section-subtitle">Comprehensive event ledger synced with Google Sheets</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn btn-glass" id="btn-export-csv">
+            <i class="fas fa-file-csv text-emerald"></i> Export CSV
+          </button>
+          <button class="btn btn-cyber" id="btn-refresh-history">
+            <i class="fas fa-arrows-rotate"></i> Sync Cloud
+          </button>
+        </div>
+      </div>
+
+      <div class="glass-panel table-panel">
+        <div class="table-toolbar">
+          <div class="search-filter-group">
+            <input type="text" class="input-search" id="visitor-search-input" placeholder="Search by ID or trigger...">
+            <select class="select-filter" id="visitor-filter-select">
+              <option value="ALL">All Events</option>
+              <option value="MOTION">Motion Sensor</option>
+              <option value="DOORBELL">Doorbell Chime</option>
+              <option value="SNAPSHOT">Manual Snapshots</option>
+            </select>
+          </div>
+          <div class="text-muted" id="visitor-count-text" style="font-size: 0.85rem;">Showing 5 records</div>
+        </div>
+
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Visitor ID</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Trigger Type</th>
+              <th>Motion</th>
+              <th>Photo</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="visitor-table-body">
+            <!-- Dynamic rows populated from Google Sheets -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 5: MOTION LOGS ================= -->
+    <section class="page-view" id="view-motion">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">PIR Motion <span class="text-rose">Detection Ledger</span></h2>
+          <p class="section-subtitle">Dedicated security timeline of infrared motion triggers</p>
+        </div>
+        <button class="btn btn-glass" id="view-arm-motion-btn" title="Turn Camera Motion Sensor ON / OFF">
+          <i class="fas fa-shield text-dim" id="view-sensor-icon"></i>
+          <span id="view-sensor-text">Motion Sensor: OFF</span>
+        </button>
+      </div>
+
+      <div class="glass-panel table-panel">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Event ID</th>
+              <th>Timestamp</th>
+              <th>Trigger Source</th>
+              <th>Severity</th>
+              <th>Photo Evidence</th>
+            </tr>
+          </thead>
+          <tbody id="motion-table-body">
+            <!-- Filtered motion entries -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 6: GALLERY ================= -->
+    <section class="page-view" id="view-gallery">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Snapshot <span class="text-cyan">Photo Gallery</span></h2>
+          <p class="section-subtitle">High-resolution visitor captures stored in Google Drive</p>
+        </div>
+        <button class="btn btn-cyber" id="btn-gallery-capture">
+          <i class="fas fa-camera"></i> Capture New
+        </button>
+      </div>
+
+      <div class="gallery-grid" id="gallery-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 7: GOOGLE SHEETS CONFIG ================= -->
+    <section class="page-view" id="view-settings">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Google Sheets <span class="text-cyan">Backend Config</span></h2>
+          <p class="section-subtitle">Configure your Google Apps Script Web App API endpoint</p>
+        </div>
+        <button class="btn btn-glass" id="btn-view-backend-code">
+          <i class="fas fa-code text-cyan"></i> View Backend Code
+        </button>
+      </div>
+
+      <div class="config-layout">
+        <!-- Main Form -->
+        <div class="glass-panel config-card">
+          <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-cloud-arrow-up text-cyan"></i> Web App API Connection</h3>
+          
+          <div class="form-group">
+            <label class="form-label" for="sheets-url-input">Google Apps Script Web App URL <span class="text-rose">*</span></label>
+            <input type="url" class="form-input" id="sheets-url-input" placeholder="https://script.google.com/macros/s/AKfycb.../exec">
+            <small style="display: block; color: var(--text-dim); margin-top: 0.4rem;">
+              Must start with <code>https://script.google.com/macros/s/.../exec</code> (From Apps Script &gt; Deploy &gt; Web app).
+            </small>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem;">
+            <label class="form-label" for="spreadsheet-view-url-input">Google Spreadsheet Link (Optional)</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="url" class="form-input" id="spreadsheet-view-url-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+              <a href="#" target="_blank" class="btn btn-glass" id="btn-open-google-sheet" style="white-space: nowrap; text-decoration: none;">
+                <i class="fas fa-arrow-up-right-from-square text-emerald"></i> Open Sheet
+              </a>
+            </div>
+            <small style="display: block; color: var(--text-dim); margin-top: 0.4rem;">
+              Your spreadsheet link for quick 1-click viewing in a new tab.
+            </small>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem;">
+            <button class="btn btn-cyber" id="btn-save-sheet-url">
+              <i class="fas fa-floppy-disk"></i> Save & Test Connection
+            </button>
+            <button class="btn btn-alert" id="btn-clear-sheet-logs">
+              <i class="fas fa-trash-can"></i> Clear All Logs
+            </button>
+          </div>
+
+          <div class="ping-result-box" id="ping-result-box">
+            <span><i class="fas fa-heart-pulse text-emerald"></i> Connection Status:</span>
+            <span id="ping-status-text">Click "Save & Test Connection" to test</span>
+          </div>
+        </div>
+
+        <!-- Quick Deploy Guide Sidebar -->
+        <div class="glass-panel" style="padding: 1.8rem;">
+          <h3 style="margin-bottom: 1rem;"><i class="fas fa-bolt text-amber"></i> Quick 3-Step Setup</h3>
+          <ol style="margin-left: 1.2rem; line-height: 1.8; color: var(--text-muted); font-size: 0.92rem;">
+            <li>Create a new spreadsheet at <a href="https://sheets.new" target="_blank" class="text-cyan">sheets.new</a></li>
+            <li>Click <strong>Extensions</strong> &gt; <strong>Apps Script</strong>, paste the backend code from <code>google_sheets_code.js</code>, and save.</li>
+            <li>Click <strong>Deploy &gt; New deployment</strong>, choose <strong>Web app</strong>, set access to <strong>"Anyone"</strong>, and paste the URL here!</li>
+          </ol>
+          <div style="margin-top: 1.5rem;">
+            <button class="btn btn-glass" style="width: 100%;" id="btn-test-sample-row">
+              <i class="fas fa-plus text-emerald"></i> Send Test Row to Sheet
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 8: ABOUT ================= -->
+    <section class="page-view" id="view-about">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">About the <span class="text-cyan">Architecture</span></h2>
+          <p class="section-subtitle">Deep dive into the Smart Door Security Cloud & Streaming stack</p>
+        </div>
+      </div>
+
+      <div class="glass-panel" style="padding: 2.5rem; line-height: 1.8;">
+        <h3 style="margin-bottom: 1rem;"><i class="fas fa-shield-halved text-cyan"></i> System Overview</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+          This web application operates as a standalone security monitoring hub. It enables direct real-time video streaming, 
+          instant high-resolution snapshot captures, and automated synchronization with Google Sheets as an encrypted, free cloud database.
+        </p>
+
+        <h3 style="margin-bottom: 1rem;"><i class="fas fa-network-wired text-emerald"></i> Google Drive & Sheets Integration</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+          When an alert occurs or a snapshot is taken, the frame is converted to Base64 and transmitted via HTTPS POST 
+          to your Google Apps Script Web App. The backend decodes the image, creates an image file in your private Google Drive folder, 
+          generates public embed links, and appends the visitor record row seamlessly.
+        </p>
+
+        <h3 style="margin-bottom: 1rem;"><i class="fas fa-mobile-screen text-amber"></i> Mobile & PC Native Experience</h3>
+        <p style="color: var(--text-muted);">
+          Engineered with responsive breakpoints, touch-friendly navigation docks for single-thumb mobile operation, 
+          tactile spring-physics animations, and Web Audio API synthesized sound effects.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= PHOTO LIGHTBOX MODAL ================= -->
+  <div class="modal-overlay" id="photo-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-photo-title">Visitor Snapshot</h3>
+        <button class="btn-icon" id="modal-close-btn"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <img src="" alt="Snapshot Preview" class="modal-img-preview" id="modal-photo-img">
+        <video id="modal-video-player" controls style="display: none; width: 100%; border-radius: var(--radius-md); max-height: 420px; margin-bottom: 1.25rem; background: #000; outline: none;"></video>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <div id="modal-photo-id" style="font-weight: 700; font-family: var(--font-mono);">VIS-000000</div>
+            <small id="modal-photo-time" style="color: var(--text-muted);">2026-09-12 10:00:00</small>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <a href="#" target="_blank" class="btn btn-glass" id="modal-drive-link">
+              <i class="fab fa-google-drive"></i> <span id="modal-drive-link-text">View Drive</span>
+            </a>
+            <a href="#" download="media" class="btn btn-cyber" id="modal-download-link">
+              <i class="fas fa-download"></i> <span id="modal-download-text">Download</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BACKEND CODE VIEWER MODAL ================= -->
+  <div class="modal-overlay" id="code-modal">
+    <div class="modal-content" style="max-width: 850px;">
+      <div class="modal-header">
+        <h3>Google Apps Script Backend Code (`google_sheets_code.js`)</h3>
+        <button class="btn-icon" id="code-modal-close-btn"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem;">
+          Copy this code and paste it into your Google Apps Script editor (Extensions &gt; Apps Script):
+        </p>
+        <textarea id="code-modal-textarea" readonly style="width: 100%; height: 350px; background: #03050a; color: #00f2fe; font-family: var(--font-mono); font-size: 0.8rem; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--glass-border); outline: none;"></textarea>
+        <div style="margin-top: 1rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button class="btn btn-cyber" id="btn-copy-backend-code">
+            <i class="fas fa-copy"></i> Copy Code to Clipboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Stack -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/google-sheets.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

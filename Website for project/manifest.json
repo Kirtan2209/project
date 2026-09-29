@@ -1,0 +1,22 @@
+{
+  "name": "Smart Door Security System",
+  "short_name": "DoorSecurity",
+  "description": "Futuristic ESP32-CAM Smart Door Security & Live Monitoring System",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#080c14",
+  "theme_color": "#00f2fe",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080c14'/><path d='M50 15 L80 30 V55 C80 72 50 85 50 85 C50 85 20 72 20 55 V30 Z' fill='none' stroke='%2300f2fe' stroke-width='6'/><circle cx='50' cy='48' r='12' fill='%2300f2fe'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23080c14'/><path d='M50 15 L80 30 V55 C80 72 50 85 50 85 C50 85 20 72 20 55 V30 Z' fill='none' stroke='%2300f2fe' stroke-width='6'/><circle cx='50' cy='48' r='12' fill='%2300f2fe'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
